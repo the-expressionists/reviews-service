@@ -1,0 +1,27 @@
+{
+  "name": "reviewcomponent",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HooliPlay/ReviewComponent.git"
+  },
+  "author": "norman liu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HooliPlay/ReviewComponent/issues"
+  },
+  "homepage": "https://github.com/HooliPlay/ReviewComponent#readme",
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-react": "^7.12.10",
+    "css-loader": "^5.0.1",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.13.0"
+  }
+}
