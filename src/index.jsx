@@ -3,4 +3,4 @@
  * @param {string} s - random string
  * @return {void}
  */
-let f = (s) => {console.log('foo', s)};
+let h = (s) => {console.log('foo', s)};
