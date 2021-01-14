@@ -1,6 +1,6 @@
 /**
-*  prints('foo')
+ *  prints('foo')
  * @param {string} s - random string
  * @return {void}
  */
-let h = (s) => {console.log('foo', s)};
+let f = (s) => {console.log('foo', s)};
