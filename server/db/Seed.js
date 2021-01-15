@@ -25,7 +25,7 @@ let mkReview = () => {
 };
 
 let seed = (n) => ( n |> [...Array(#)]
-                      |> #.map((_, i) => i |> mkReview |> new Review(#) |> #.save()) 
+                      |> #.map(() => # |> mkReview |> new Review(#) |> #.save()) 
                       |> Promise.all
                   );
 
