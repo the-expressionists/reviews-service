@@ -1,0 +1,15 @@
+version: 2.1
+
+workflows:
+  deploy:
+    
+
+orbs:
+  node: circleci/node@4.1.0
+
+
+workflows:
+  node-tests:
+    jobs:
+      - run-command test
+  
