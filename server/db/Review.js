@@ -14,6 +14,7 @@ const ReviewSchema = {
     likes: { type: Number, required: true, },
     body: { type: String, required: true, },
     stars: { type: Number, required: true, },
+    thumbnail: { type: String },
     recommend: { type: Boolean, required: true, },
     product: { type: Schema.Types.ObjectId, ref: 'Product'},
     metrics: {

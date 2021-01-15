@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": ">=15.6.0"
+  },
   "scripts": {
     "watch": "webpack -c ./webpack.config.js -w",
     "build-server": "babel server/index.js --out-file index-compiled.js",
