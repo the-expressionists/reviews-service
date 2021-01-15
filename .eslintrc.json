@@ -1,0 +1,27 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  // extends: [
+  //   "plugin:react/recommended",
+  //   "airbnb",
+  // ],
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    // ecmaVersion: 2020,
+    "babelOptions": {
+      "configFile": "./babel.config.json"
+    }
+  },
+  "plugins": [
+    "@babel",
+    "react"
+  ],
+  "rules": {
+    "@babel/new-cap": "error",
+    "@babel/no-invalid-this": "error",
+    "@babel/semi": "error"
+  }
+}
