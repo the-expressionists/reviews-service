@@ -1,19 +1,27 @@
 {
-  "presets": ["@babel/react", "@babel/preset-env", "@babel/preset-typescript"],
+  "sourceMaps": "inline",
+  "retainLines": true,
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react",
+    "@babel/preset-typescript"
+  ],
   "plugins": [
     "@babel/plugin-proposal-function-bind",
     "@babel/plugin-proposal-partial-application",
     "@babel/plugin-proposal-do-expressions",
     "@babel/plugin-proposal-logical-assignment-operators",
-
     [
       "@babel/plugin-proposal-decorators",
-      {"decoratorsBeforeExport": true}
+      {
+        "decoratorsBeforeExport": true
+      }
     ],
-
     [
       "@babel/plugin-proposal-pipeline-operator",
-      { "proposal": "smart" }
+      {
+        "proposal": "smart"
+      }
     ]
   ]
 }

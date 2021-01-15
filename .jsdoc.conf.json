@@ -1,7 +1,11 @@
 {
     "source": {
-        "include": ["."],
+        "include": [],
         "includePattern": ".+\\.[jt]s(doc|x)?$",
         "excludePattern": "node_modules"
+    },
+    "plugins": ["jsdoc-http-plugin"],
+    "opts": {
+        "recurse": true
     }
 }
