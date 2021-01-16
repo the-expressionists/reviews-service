@@ -27,27 +27,26 @@ let photoGetter = axios.create({
     responseType: 'arraybuffer'
 });
 
-let getPhotos = (n) => {
+let bundlePhoto = (buf) => uploadToS3(`${genUUID()}.jpeg`, Buffer.from(buf, 'binary'));
+
+let getImgUrls = (n, delayTime = 1000) => {
     let ct = 1;
     console.log('Downloading images...');
-    return ( n |> [...Array(#)]
-        |> #.map((_, i) => delay(::photoGetter.get, i * 1000) // to guarantee unique images
-                 .then(d => {
+    return ( [...Array(n)]
+        |> #.map((_, i) => delay(::photoGetter.get, i * delayTime) // to guarantee unique images
+                 .then(resp => {
                      console.log(`Saving ${ct++}/${n} images...`);
-                     let buf = Buffer.from(d.data, 'binary');
-                     let filename = `${genUUID()}.jpeg`;
-                     return uploadToS3(filename, buf);
-                    //  return fs.writeFile(`${filepath}/${uuid}.jpeg`, buf);
+                     return bundlePhoto(resp.data);
                     })
-                 .then(s3Obj => s3Obj.location)
+                 .then(s3Obj => s3Obj |> #.Location) // upload to S3, returning the location
                 ) 
         |> Promise.all
         ).catch(::console.log);
 };
 
-
 let mkStar = () => 1 + ~~(Math.random() * 5);
-let mkReview = () => {
+
+let mkReview = (thumbnail) => {
     return {
         title: lorem.sentence(10),
         user: internet.userName(),
@@ -55,6 +54,7 @@ let mkReview = () => {
         likes: random.number(1000),
         body: lorem.paragraph(30),
         stars: mkStar(),
+        thumbnail: thumbnail,
         recommend: random.boolean(),
         // product: random.uuid(),
         metrics: {
@@ -67,30 +67,20 @@ let mkReview = () => {
     };
 };
 
+/**
+ * @param {Number} n - How many records to create.
+ * @return {Promise(Array(Review))} - Array of Review instances.
+ */
+let seed = (n) => getImgUrls(n).then(urls => urls.map(url =>
+                    mkReview(url) |> new Review(#) |> #.save())
+                    |> Promise.all);
 
-let f = () => {
-    console.log('resolved!');
-    return 1;
-};
-
-delay(f, 1000).then(() => console.log('yep'));
-
-// let seed = (n) => ( n |> [...Array(#)]
-//                       |> #.map(() => # |> mkReview |> new Review(#) |> #.save()) 
-//                       |> Promise.all
-//                   );
-
-let imgDir = '/tmp/jtwenlImages';
-
-let populateImgs = async (n) => {
-    if (!existsSync(imgDir)) {
-        await fs.mkdir(imgDir);
-    }
-    getPhotos(n, imgDir).then(() => console.log('images saved!')).catch(err => console.log(err));
-};
-
-populateImgs(1);
-
-// // seed(100)
-// //     .then(arr => console.log(arr, `Wrote ${arr.length} records!`) 
-// //     ).catch(err => console.log(err));
+seed(100)
+    .then(arr => {
+        console.log(`Wrote ${arr.length} records!`); 
+        process.exit(0);
+    })
+    .catch(err => {
+        console.log(err);
+        process.exit(1);
+    });
