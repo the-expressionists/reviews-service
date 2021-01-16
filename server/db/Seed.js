@@ -1,3 +1,11 @@
+/**
+ * @module Seed
+ * contains some functions for generating fake data, fetching images from 
+ *  `thispersondoesnotexist.com` and uploading them to AWS. The stored URLs are then
+ *  bundled in a `Review` object and saved in the database.
+ * Module will seed 100 records when called directly.
+ * 
+ */
 import faker from 'faker';
 import Review from './Review.js';
 import fs from 'fs/promises';
@@ -8,6 +16,9 @@ import crypto from 'crypto';
 import uploadToS3 from '../../config/aws.js';
 let {lorem, name, internet, random} = faker;
 
+/**
+ * @return {String} - a valid, random UUID
+ */
 const genUUID = () => {
     let buf = crypto.randomBytes(16);
     buf[6] &= 0b01001111; // set high nibble to 4
@@ -22,13 +33,25 @@ let delay = (f, time) => new Promise((res) => setTimeout(() => res(f()), time));
 
 let log = (d) => {console.log(d); return d;};
 
+// create an axios instance - we need to specify an arraybuffer to prevent the image data
+// from getting corrupted
 let photoGetter = axios.create({
     baseURL: 'https://thispersondoesnotexist.com/image',
     responseType: 'arraybuffer'
 });
 
+/**
+ * 
+ * @param {Buffer} buf - Buffer object representing a JPEG image
+ * @return {Promise(ManagedUpload)} - AWS object with metadata for the uploaded S3 object 
+ */
 let bundlePhoto = (buf) => uploadToS3(`${genUUID()}.jpeg`, Buffer.from(buf, 'binary'));
 
+/**
+ * @param {number} n - how many urls to get
+ * @param {number} [delayTime=1000] - delay period between GET requests (necessary to prevent duplicates)
+ * @return {Promise(Array(String))} - Array of `n` image URLs.
+ */
 let getImgUrls = (n, delayTime = 1000) => {
     let ct = 1;
     console.log('Downloading images...');
@@ -75,12 +98,18 @@ let seed = (n) => getImgUrls(n).then(urls => urls.map(url =>
                     mkReview(url) |> new Review(#) |> #.save())
                     |> Promise.all);
 
-seed(100)
-    .then(arr => {
-        console.log(`Wrote ${arr.length} records!`); 
-        process.exit(0);
-    })
-    .catch(err => {
-        console.log(err);
-        process.exit(1);
-    });
+if (require.main === module) {
+    seed(100)
+        .then(arr => {
+            console.log(`Wrote ${arr.length} records!`);
+            process.exit(0);
+        })
+        .catch(err => {
+            console.log(err);
+            process.exit(1);
+        });
+}
+
+export {
+    seed, genUUID, bundlePhoto, mkReview
+};
