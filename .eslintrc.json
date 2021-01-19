@@ -2,7 +2,8 @@
   "env": {
     "browser": true,
     "es2021": true,
-    "node": true
+    "node": true,
+    "jest/globals": true
   },
   // extends: [
   //   "plugin:react/recommended",
@@ -17,11 +18,17 @@
   },
   "plugins": [
     "@babel",
-    "react"
+    "react",
+    "jest"
   ],
   "rules": {
     "@babel/new-cap": "error",
     "@babel/no-invalid-this": "error",
-    "@babel/semi": "error"
+    "@babel/semi": "error",
+    "jest/valid-expect": "error",
+    "jest/no-identical-title": "error",
+    "jest/no-focused-tests": "error",
+    "jest/no-disabled-tests": "error"
+
   }
 }

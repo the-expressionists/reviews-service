@@ -3,8 +3,10 @@ import process from 'process';
 import { join } from 'path';
 import axios from 'axios';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 
 import Review from './db/Review.js';
+// import {mkUUID}
 import {reviewsHandler} from './endpoints';
 
 
@@ -12,6 +14,7 @@ import {reviewsHandler} from './endpoints';
 const app = new express();
 const PORT = process.env.PORT || 8081;
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
