@@ -10,9 +10,6 @@ class App extends React.Component {
         let {getReviews} = props;
         this.getReviews = getReviews;
         this.state = {};
-        // this.state = {
-        //     reviews: [],
-        // };
     }
     
     componentDidMount() {
@@ -27,6 +24,7 @@ class App extends React.Component {
     render() {
         let {reviews} = this.state;
         // the key thing is a hack to get it to rerender after load
+        // necessary??
         return (
             <div>
                 hello, world!
