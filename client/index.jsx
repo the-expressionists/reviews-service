@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import getReviews from './network.js';
 import ReviewList from './components/ReviewList.jsx';
+import './style/reviewBar.scss';
 
 class App extends React.Component {
     constructor(props) {

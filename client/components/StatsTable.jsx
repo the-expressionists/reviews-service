@@ -12,19 +12,14 @@ const StatsTable = (props) => {
     // take the arithmetic mean of the metrics if we're passed multiple
     let {placeHolders, reviews} = props;
     let metrics = Array.isArray(reviews) ? aggregate(reviews) : reviews.metrics;
-    
-    let style = {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    };
 
     let mkRow = ([key, plsHldr], i) => (
-        <div style={style} key={key + i} className='stats-table-row'>
-            <p>{plsHldr}</p>
+        // <div key={key + i} className='stats-table-row'>
+      <>
+            <div className='metrics-placeholder'>{plsHldr}</div>
             <RatingsBar n={metrics[key]}/>
-            {metrics[key]}
-        </div>
+            <div className='metrics-value'>{metrics[key]}</div>
+      </>
     );
 
     return (

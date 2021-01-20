@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+
+@mixin marginless {
+  margin: 0;
+  padding: 0;
+}
+
+$faintgrey: rgb(235, 235, 235);
+
+body {
+  color: rgb(72, 72, 72);
+  font: {
+    family: 'Noto Sans', sans-serif;
+    size: 17.5px; // taken from ikea site, idk if they use media queries
+    weight: 400;
+  }
+}
+.stats-table {
+  display: grid;
+  grid: {
+    gap: 0.8rem;
+    template: {
+      columns: 1fr minmax(100px, 1fr) minmax(20px, 1em);
+      rows: auto;
+    }
+  };
+  .metrics-placeholder {
+    grid-column-start: 1;
+  }
+  .ratings-bar {
+    grid-column-start: 2;
+  }
+  .metrics-value {
+    grid-column-start: 3;
+    justify-self: end;
+
+  }
+}
+
+.ratings-bar {
+  box-sizing: border-box;
+  position: relative;
+  height: 1px;
+  .dots-container {
+    display: inline-flex;
+     position: relative;
+     flex-direction: row;
+     justify-content: space-evenly;
+     width: 100%;
+  };
+  .ratings-bar-dot {
+    color: white;
+    z-index: 2;
+  };
+  .ratings-bar-inner-bar {
+    position: absolute;
+    left: 0;
+    z-index: 1;
+    display: inline;
+    box-sizing: border-box;
+    height: 1rem;
+    border: {
+      top: 0.45em solid white;
+      bottom: 0.2em solid white;
+    }
+    &.fg {
+      background-color: black;
+    }
+    &.bg {
+      background-color: $faintgrey;
+      width: 100%;
+
+    }
+  }
+}
+
+.review-list {
+  padding: 0 5%;
+  
+  .review-list-item {
+    border: {
+      bottom: 1px solid $faintgrey;
+    }
+  }
+  
+}

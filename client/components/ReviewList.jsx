@@ -21,7 +21,7 @@ const ReviewListItem = (props) => {
     borderBottom: '1px solid grey'
   };
   return (
-    <div style={style} >
+    <div className='review-list-item' >
       <h5>
         {fmtStar(stars)} {`${user} - ${prettyDate(date)}`}
       </h5>
