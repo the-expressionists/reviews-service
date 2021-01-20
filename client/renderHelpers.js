@@ -74,7 +74,7 @@ let cast = (konstruktor, value) => do {
   * @return {String} Date formatted as `String(MM) DD, YY`
  */
 const prettyDate = (dateStr) => {
-  let date = cast(Date, dateStr);
+  let date = cast(Date, dateStr); 
   let months = [ 'January'
                , 'February'
                , 'March'

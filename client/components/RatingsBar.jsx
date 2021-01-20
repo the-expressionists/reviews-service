@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import {aggregate, fmtStar, mean} from '../renderHelpers.js';
 
 const RatingsBar = ({n}) => {
@@ -26,8 +28,6 @@ const RatingsBar = ({n}) => {
       zIndex: 2,
   };
   
-  console.log(n);
-  console.log(`${n / 5 * 100}%`);
   let barStyle = {
     backgroundColor: 'black',
     // maxHeight: '100%',
@@ -55,18 +55,9 @@ const RatingsBar = ({n}) => {
     </div>
   );
 };
-const Aggregator = (props) => {
-  let {reviews} = props;
-  let stats = aggregate(reviews);
-  let overall = mean(reviews.map(k => k.stars));
-  return (
-    <div className='review-aggregator'>
-      <h1>Reviews</h1>
-      <h2 style={{margin: '0 auto'}}>{overall.toFixed(1)}</h2>
-      <span>{fmtStar(~~overall)} {`(${reviews.length})`}</span>
-    
-      <h3>Average customer ratings</h3>
-    </div>
-  );
+
+RatingsBar.propTypes = {
+    n: PropTypes.number.isRequired,
 };
-export default Aggregator;
+
+export default RatingsBar;
