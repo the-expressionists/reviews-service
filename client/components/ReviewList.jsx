@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Aggregator from './Aggregator.jsx';
-import {fmtStar} from '../renderHelpers.js';
+import {fmtStar, prettyDate} from '../renderHelpers.js';
 
 const fmtRecommend = (b) => b ? (<p>✅ Yes, I recommend this product</p>) : null;
 
@@ -11,7 +11,7 @@ const ReviewListItem = (props) => {
     return (
         <div>
            <h5>
-               {fmtStar(stars)} {`${user} - ${date}`}
+               {fmtStar(stars)} {`${user} - ${prettyDate(date)}`}
            </h5> 
            <h4>{title}</h4>
            <p>{body}</p>

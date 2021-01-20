@@ -62,9 +62,8 @@ const Aggregator = (props) => {
   return (
     <div className='review-aggregator'>
       <h1>Reviews</h1>
-      <h2>{overall.toFixed(1)}</h2>
+      <h2 style={{margin: '0 auto'}}>{overall.toFixed(1)}</h2>
       <span>{fmtStar(~~overall)} {`(${reviews.length})`}</span>
-      <RatingsBar n={4.3} />
     
       <h3>Average customer ratings</h3>
     </div>

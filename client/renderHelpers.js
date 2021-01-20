@@ -43,6 +43,10 @@ const collect = (...args) => {
   }, {});
 };
 
+/**
+ * @param {Array(Object)} reviews - Review objects from the server
+ * @return {Object(Number)} - arithmetic mean of each key, calculated from each object
+ */
 const aggregate = (reviews) => {
   return reviews.map(r => r.metrics)
     |> collect
@@ -50,8 +54,49 @@ const aggregate = (reviews) => {
     ;
 };
 
+/**
+ * @param {Function} konstruktor - an object constructor (Date, String, etc)
+  * @param {Any} value - an object that might not be an `instanceof` konstruktor.
+  * @return {Object} instance of that constructor, instantiated if a type mismatch is found.
+ */
+let cast = (konstruktor, value) => do {
+    if (value === undefined) {
+      value1 => cast(konstruktor, value);
+    } else if (value instanceof konstruktor) {
+      value;
+    } 
+    // eslint-disable-next-line @babel/new-cap
+    new konstruktor(value);
+  };
 
+/**
+ * @param {Date} date - Date object to be formatted
+  * @return {String} Date formatted as `String(MM) DD, YY`
+ */
+const prettyDate = (dateStr) => {
+  let date = cast(Date, dateStr);
+  let months = [ 'January'
+               , 'February'
+               , 'March'
+               , 'April'
+               , 'May'
+               , 'June'
+               , 'July'
+               , 'August'
+               , 'September'
+               , 'October'
+               , 'November'
+               , 'December'
+               , 'February'
+               ];
+  let [d, m, y] = ['getDate', 'getMonth', 'getFullYear'].map(f => date[f]());
+  return `${months[m]} ${d}, ${y}`;
+};
 
+/**
+ * @param {Number} n - How many stars out of 5
+  * @return {String} - n full stars, 5 - n black stars
+ */
 const fmtStar = (n) => '★'.repeat(n) + '☆'.repeat(5 - n);
 
 export { fmtStar
@@ -59,4 +104,6 @@ export { fmtStar
        , collect
        , mean
        , map
+       , cast
+       , prettyDate
        };
