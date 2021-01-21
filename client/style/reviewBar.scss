@@ -8,7 +8,10 @@
 $faintgrey: rgb(235, 235, 235);
 
 body {
+  @include marginless;
   color: rgb(72, 72, 72);
+  padding: 40px 2%;
+
   font: {
     family: 'Noto Sans', sans-serif;
     size: 17.5px; // taken from ikea site, idk if they use media queries
@@ -20,7 +23,7 @@ body {
   grid: {
     gap: 0.8rem;
     template: {
-      columns: 1fr minmax(100px, 1fr) minmax(20px, 1em);
+      columns: 1fr minmax(30px, 0.5fr) minmax(20px, 1em);
       rows: auto;
     }
   };
@@ -69,18 +72,46 @@ body {
     &.bg {
       background-color: $faintgrey;
       width: 100%;
-
     }
+  }
+}
+
+@mixin greyborder {
+  border: {
+    bottom: 1px solid $faintgrey;
   }
 }
 
 .review-list {
-  padding: 0 5%;
+  padding: 40px 0;
   
   .review-list-item {
-    border: {
-      bottom: 1px solid $faintgrey;
+    @extend .review-list;
+    @include greyborder;
+    .review-list-item-header {
+      display: flex;
+      justify-content: space-between;
+      flex-flow: row nowrap;
+      font-size: 15px;
+      .stars {
+        font-size: 20px;
+      }
     }
+
   }
   
+  .review-aggregator {
+    @include greyborder;
+    h2 {
+      color: black;
+      font-weight: 700;
+      &.review-agg-header {
+        font-size: 22.5px;
+      }
+      &.overall-score {
+        font-size: 30px;
+      }
+    }
+  }
 }
+

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 
 import {aggregate, fmtStar, mean} from '../renderHelpers.js';
 
-const RatingsBar = ({n}) => {
+const RatingsBar = ({value}) => {
   let barStyle = {
     // need to specify this in the component
-    width: `${n / 5 * 100}%`,
+    width: `${value / 5 * 100}%`,
   };
 
   let dots = (
@@ -28,7 +28,7 @@ const RatingsBar = ({n}) => {
 };
 
 RatingsBar.propTypes = {
-    n: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
 };
 
 export default RatingsBar;
