@@ -13,7 +13,7 @@ const reviewsHandler = (req, res, next) => {
   let {itemId} = req.body; // currently not integrated
   let query = itemId !== undefined ? { product : itemId } : {}; 
   Review.find().select('-__v -_id')
-    .then(data => {console.log(data); res.status(200).json(data).end()})
+    .then(data => res.status(200).json(data).end())
     .catch(err => {
       console.log(err);
       res.status(400).end();

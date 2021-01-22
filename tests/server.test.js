@@ -3,11 +3,14 @@ import { TestScheduler } from 'jest';
 import { iteratee } from 'lodash';
 import { isExportDeclaration } from 'typescript';
 import 'regenerator-runtime/runtime';
+import axios from 'axios';
+import process from 'process';
+import child_process from 'child_process';
 
 const reviewFile = '../server/db/Review.js';
+
 jest.mock(reviewFile);
 
-const axios = require('axios');
 const {reviewsHandler} = require('../server/endpoints');
 
 const genericTests = (f, desiredLen) => {
@@ -27,7 +30,7 @@ const dummyData = [
   { 'object': 'value' },
   { 'object': 'another value' }
 ];
-describe('review component server', () => {
+describe('review middleware', () => {
 
   genericTests(reviewsHandler, 3);
   let req, resp, next = (() => undefined);
@@ -46,18 +49,40 @@ describe('review component server', () => {
   });
   it('should serve a set of reviews', async (done) => {
     require(reviewFile).setDBReturn(d => Promise.resolve(d));
-    return testPromise().then(resp => {
-      expect(resp.status).toHaveBeenCalledWith(200);
-      expect(resp.json).toHaveBeenCalledTimes(1);
-      expect(Array.isArray(resp.json.mock.calls[0])).toBe(true);
-    }).then(done);
+    let resp = await testPromise();
+    expect(resp.status).toHaveBeenCalledWith(200);
+    expect(resp.json).toHaveBeenCalledTimes(1);
+    expect(Array.isArray(resp.json.mock.calls[0])).toBe(true);
+    done();
   });
 
   it('should fail gracefully', async (done) => {
     require(reviewFile).setDBReturn(() => Promise.reject(new Error('BOOM')));
-    return testPromise().then(resp => {
-      expect(resp.status).toHaveBeenCalledWith(400);
-      expect(resp.json).not.toHaveBeenCalled();
-    }).finally(done);
+    
+    let resp = await testPromise();
+    expect(resp.status).toHaveBeenCalledWith(400);
+    expect(resp.json).not.toHaveBeenCalled();
+    done();
   });
+});
+
+describe('static file server', () => {
+    let host = process.env.SERVER_URL ?? 'http://127.0.0.1';
+    let port = process.env.PORT || 8081;
+    let serv = axios.create({baseURL: `${host}:${port}/`});
+
+    const withServer = async (assertions) => {
+      let app = child_process.fork('server/index.js');
+      await assertions();
+      app.kill(0);
+    };
+
+    it('should serve our site', async (done) => {
+      withServer(async () => {
+        let resp = await serv.get();
+        expect(resp.status).toBe(200);
+        expect(resp.statusText).toBe('OK');
+      });
+      done();
+    });
 });

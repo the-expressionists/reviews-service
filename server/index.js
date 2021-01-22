@@ -1,13 +1,13 @@
-import express from 'express';
-import process from 'process';
-import { join } from 'path';
-import axios from 'axios';
-import bodyParser from 'body-parser';
-import cors from 'cors';
+const express = require('express');
+const process = require('process');
+const { join } = require('path');
+const axios = require('axios');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 
-import Review from './db/Review.js';
+const Review = require('./db/Review.js');
 // import {mkUUID}
-import {reviewsHandler} from './endpoints';
+const {reviewsHandler} = require('./endpoints');
 
 
 // eslint-disable-next-line @babel/new-cap
