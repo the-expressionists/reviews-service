@@ -48,17 +48,17 @@ let photoGetter = axios.create({
 let bundlePhoto = (buf) => uploadToS3(`${genUUID()}.jpeg`, Buffer.from(buf, 'binary'));
 
 /**
- * @param {number} n - how many urls to get
+ * @param {number} numUrls - how many urls to get
  * @param {number} [delayTime=1000] - delay period between GET requests (necessary to prevent duplicates)
  * @return {Promise(Array(String))} - Array of `n` image URLs.
  */
-let getImgUrls = (n, delayTime = 1000) => {
+let getImgUrls = (numUrls, delayTime = 1000) => {
     let ct = 1;
     console.log('Downloading images...');
-    return ( [...Array(n)]
+    return ( [...Array(numUrls)]
         |> #.map((_, i) => delay(::photoGetter.get, i * delayTime) // to guarantee unique images
                  .then(resp => {
-                     console.log(`Saving ${ct++}/${n} images...`);
+                     console.log(`Saving ${ct++}/${numUrls} images...`);
                      return bundlePhoto(resp.data);
                     })
                  .then(s3Obj => s3Obj |> #.Location) // upload to S3, returning the location
@@ -98,9 +98,13 @@ let seed = (n) => getImgUrls(n).then(urls => urls.map(url =>
                     mkReview(url) |> new Review(#) |> #.save())
                     |> Promise.all);
 
+// equivalent to `if __name__=='__main__'`
+// require.main indicates the entry point for the program, e.g. whether we're
+// running this module from the shell directly or if it's being required by
+// another module.
 if (require.main === module) {
-    seed(100)
-        .then(arr => {
+  seed(100)
+    .then(arr => {
             console.log(`Wrote ${arr.length} records!`);
             process.exit(0);
         })
