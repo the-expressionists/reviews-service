@@ -57,32 +57,36 @@ describe('review middleware', () => {
   });
 
   it('should fail gracefully', async (done) => {
-    require(reviewFile).setDBReturn(() => Promise.reject(new Error('BOOM')));
+
+    let boom = new Error('BOOM');
+    require(reviewFile).setDBReturn(() => Promise.reject(boom));
     
+    console.log = jest.fn(); // hide the error log
     let resp = await testPromise();
     expect(resp.status).toHaveBeenCalledWith(400);
     expect(resp.json).not.toHaveBeenCalled();
+    expect(console.log).toHaveBeenCalledWith(boom);
     done();
   });
 });
 
-describe('static file server', () => {
-    let host = process.env.SERVER_URL ?? 'http://127.0.0.1';
-    let port = process.env.PORT || 8081;
-    let serv = axios.create({baseURL: `${host}:${port}/`});
+// describe('static file server', () => {
+//     let host = process.env.SERVER_URL ?? 'http://127.0.0.1';
+//     let port = process.env.PORT || 8081;
+//     let serv = axios.create({baseURL: `${host}:${port}/`});
 
-    const withServer = async (assertions) => {
-      let app = child_process.fork('server/index.js');
-      await assertions();
-      app.kill(0);
-    };
+//     const withServer = async (assertions) => {
+//       let app = child_process.fork('server/index.js');
+//       await assertions();
+//       app.kill(0);
+//     };
 
-    it('should serve our site', async (done) => {
-      withServer(async () => {
-        let resp = await serv.get();
-        expect(resp.status).toBe(200);
-        expect(resp.statusText).toBe('OK');
-      });
-      done();
-    });
-});
+//     it('should serve our site', async (done) => {
+//       withServer(async () => {
+//         let resp = await serv.get();
+//         expect(resp.status).toBe(200);
+//         expect(resp.statusText).toBe('OK');
+//       });
+//       done();
+//     });
+// });

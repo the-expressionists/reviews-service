@@ -6,6 +6,8 @@
  * @return {Object} a new object with every value replaced with the result of the function.
  * Lifts a function of type `(a -> b)` to a function of type `Object(k: a) -> Object(k: b)`.
  * Will keep returning a trampolined function until an object is provided.
+ * 
+ * Only applies the function over a shallow depth since heterogenous objects are not functors.
  */
 // pass in an object with identical key types.
 // god I wish this were typescript.
@@ -48,6 +50,9 @@ const collect = (...args) => {
  * @return {Object(Number)} - arithmetic mean of each key, calculated from each object
  */
 const aggregate = (reviews) => {
+  if (!(reviews && reviews.length)) {
+    return {};
+  };
   return reviews.map(r => r.metrics)
     |> collect
     |> map(mean, #)
