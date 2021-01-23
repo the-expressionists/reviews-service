@@ -15,8 +15,8 @@ const TableView = ({ review }) => {
       <div className="table-view-head-container">
         <img className="thumbnail" src={review.thumbnail} />
         <div className="table-view-header">
-          <div>{user}</div>
-          <div>{rh.monthYear(date)}</div>
+          <b>{user}</b>
+          <div className="table-view-header-date">{rh.monthYear(date)}</div>
         </div>
       </div>
       <div className={"table-view-body " + "clamped".repeat(getHide)}>
