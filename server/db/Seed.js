@@ -15,7 +15,6 @@ import path from 'path';
 import crypto from 'crypto';
 import uploadToS3 from '../../config/aws.js';
 let {lorem, name, internet, random} = faker;
-
 /**
  * @return {String} - a valid, random UUID
  */

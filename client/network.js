@@ -1,4 +1,4 @@
-import {create} from 'axios';
+import axios, {create} from 'axios';
 import process from 'process';
 
 const serverUrl = process.env.SERVER_URL ?? 'http://127.0.0.1:8081';
@@ -17,4 +17,14 @@ const getReviews = () => {
         });
 };
 
+const getImg = (url) => axios.get(url, {
+  responseType: 'arraybuffer'
+}).then(resp => Buffer.from(resp.data, 'binary'))
+  .catch(err => {
+    console.log(err);
+    return null;
+  });
+
+
 export default getReviews;
+export {getImg};

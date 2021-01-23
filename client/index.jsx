@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import getReviews from './network.js';
 import ReviewList from './components/ReviewList.jsx';
+import ReviewTable from './components/ReviewTable.jsx';
 import './style/reviewBar.scss';
 
 class App extends React.Component {
@@ -28,7 +29,9 @@ class App extends React.Component {
         // necessary??
         return (
             <div>
-                hello, world!
+                {reviews
+                ? (<ReviewTable key={'rt-' + reviews.length} reviews={reviews} />)
+                : null}
                 {reviews  
                 ? (<ReviewList key={'rl-' + reviews.length} reviews={reviews}/>)
                 : null}
