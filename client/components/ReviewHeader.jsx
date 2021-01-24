@@ -24,7 +24,7 @@ const ReviewHeader = (props) => {
       <span>{fmtStar(~~overall)} {`(${reviews.length})`}</span>
     
       <h4>Average customer ratings</h4>
-      <StatsTable placeHolders={placeHolders} reviews={reviews} />
+      <StatsTable placeHolders={placeHolders} reviews={reviews} places={1}/>
     
     </div>
   );

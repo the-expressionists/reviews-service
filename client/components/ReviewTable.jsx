@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import RatingsBar from './RatingsBar.jsx';
+import StatsTable, { StatsRow } from './StatsTable.jsx';
+import ReviewHeader, { placeHolders } from './ReviewHeader.jsx';
 import * as rh from '../renderHelpers.js';
 import { getImg } from '../network.js';
 
@@ -30,10 +32,32 @@ const TableView = ({ review }) => {
   // getImg()
 };
 
+const ReviewTableStats = ({ reviews, mean }) => {
+  // little hack to avoid refactoring
+  // treat Overall as a key, since we want to show a bar here
+  // as opposed to inside the modal.
+  let plH = [['overall', 'Overall']].concat(placeHolders);
+  let stats = rh.aggregate(reviews);
+  stats.overall = mean;
+  // create an array of divs so that we can style these inline, then put them in a flexbox
+  return (
+    <div className="review-table-stats" >
+      {plH.map(([key, pl], i) => (
+        <div className='review-table-row'>
+          <StatsRow key={'rtr-' + i} val={stats[key]} placeHolder={pl} places={1} />
+        </div>
+      ))}
+    </div>
+  );
+};
+
 class ReviewTable extends React.Component {
   constructor(props) {
     super(props);
-    this.stats = rh.aggregate(props.reviews);
+    let { reviews } = props;
+    this.reviews = reviews;
+    // calculate it here as opposed to in the stats
+    this.mean = rh.mean(reviews.map(r => r.stars));
     this.state = {
       highlights: props.reviews.slice(0, 6),
     };
@@ -41,13 +65,15 @@ class ReviewTable extends React.Component {
 
   render() {
     let { highlights } = this.state;
-    console.log(highlights);
     return (
-      <div className="review-table-box">
-        {highlights.map((review, i) => (
-          <TableView key={i} review={review} />
-        ))}
+      <div className="review-table-container">
+        <ReviewTableStats reviews={highlights} mean={this.mean} />
+        <div className="review-table-box">
+          {highlights.map((review, i) => (
+            <TableView key={i} review={review} />
+          ))}
 
+        </div>
       </div>
     );
   }

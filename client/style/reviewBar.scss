@@ -150,8 +150,38 @@ body {
   cursor: pointer;
 }
 
+@mixin bicolumn {
+  width: calc(50% - 0.5rem);
+}
+
+.review-table-container {
+  margin: 1rem;
+  .review-table-stats {
+    display: flex; 
+    flex-flow: row wrap;
+    justify-content: space-between;
+    max-width: 100%;
+  }
+}
+
+.review-table-row {
+  display: grid;
+  // max-width: calc(50 % 0.5rem)
+  align-items: start;
+  grid: {
+    template: {
+      columns: 2fr 2fr auto;
+    }
+  }
+  @include bicolumn;
+  .metrics-value {
+    padding-left: 1rem;
+  }
+}
+
 .review-table-box {
   display: flex;
+  margin-top: 1rem;
   justify-content: space-between;
   flex-flow: row wrap;
   flex: 2;
