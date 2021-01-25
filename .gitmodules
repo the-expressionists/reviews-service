@@ -1,0 +1,9 @@
+[submodule "similarItems"]
+	path = similarItems
+	url = https://github.com/JTWENL/similarItems.git
+[submodule "reviews-service"]
+	path = reviews-service
+	url = https://github.com/JTWENL/reviews-service.git
+[submodule "MainDescriptionService"]
+	path = MainDescriptionService
+	url = https://github.com/JTWENL/MainDescriptionService.git
