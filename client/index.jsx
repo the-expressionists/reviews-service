@@ -41,7 +41,8 @@ class ReviewComponent extends React.Component {
           opacity={0.8}
           />
         ) : null}
-        <div onClick={toggle}>HHAAAUUUNNGHH???</div>
+        {/* TODO add the modal back in*/}
+        {/* <div onClick={toggle}>HHAAAUUUNNGHH???</div> */}
         
       </>
     );
