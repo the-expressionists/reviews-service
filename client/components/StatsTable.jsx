@@ -15,13 +15,6 @@ const StatsRow = (props) => {        // <div key={key + i} className='stats-tabl
     </>
   );
 };
-// this definitely isn't correct
-/**
- * @component
- * @param {Array<object>| object} reviews 
- * @extends {Component<Props>}
- */
-
 
 const StatsTable = (props) => {
   // take the arithmetic mean of the metrics if we're passed multiple

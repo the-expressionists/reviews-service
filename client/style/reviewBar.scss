@@ -5,6 +5,12 @@
   padding: 0;
 }
 
+
+@mixin even-flex-row {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
 $faintgrey: rgb(235, 235, 235);
 
 body {
@@ -43,12 +49,11 @@ body {
 .ratings-bar {
   box-sizing: border-box;
   position: relative;
-  height: 1px;
   .dots-container {
     display: inline-flex;
+    justify-content: space-evenly;
+    flex-flow: row nowrap;
      position: relative;
-     flex-direction: row;
-     justify-content: space-evenly;
      width: 100%;
   };
   .ratings-bar-dot {
@@ -89,9 +94,8 @@ body {
     @extend .review-list;
     @include greyborder;
     .review-list-item-header {
-      display: flex;
-      justify-content: space-between;
-      flex-flow: row nowrap;
+      @include even-flex-row();
+      flex-wrap: nowrap;
       font-size: 15px;
       .stars {
         font-size: 20px;
@@ -125,8 +129,8 @@ body {
   // margin: 0 auto;
   margin-bottom: 1rem;
   .table-view-head-container {
-    display: flex;
-    flex-flow: row nowrap;
+    @include even-flex-row();
+    justify-content: start;
     .table-view-header {
       display: flex;
       flex-flow: column nowrap;
@@ -150,23 +154,32 @@ body {
   cursor: pointer;
 }
 
+@mixin smol-screen-no-table {
+  @media (max-width: 640px) {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-evenly;
+  }
+}
+
 @mixin bicolumn {
   width: calc(50% - 0.5rem);
+  @media (max-width: 640px) {
+    width: 100%;
+  }
 }
 
 .review-table-container {
-  margin: 1rem;
+  margin: 1rem 0;
   .review-table-stats {
-    display: flex; 
-    flex-flow: row wrap;
-    justify-content: space-between;
+    @include even-flex-row;
     max-width: 100%;
+    @include smol-screen-no-table;
   }
 }
 
 .review-table-row {
   display: grid;
-  // max-width: calc(50 % 0.5rem)
   align-items: start;
   grid: {
     template: {
@@ -180,18 +193,17 @@ body {
 }
 
 .review-table-box {
-  display: flex;
+  @include even-flex-row();
   margin-top: 1rem;
-  justify-content: space-between;
-  flex-flow: row wrap;
   flex: 2;
   max-width: 100%;
   align-content: flex-start;
   width: 100%;
   .table-view {
-    width: calc(50% - 0.5rem);
     flex-wrap: wrap;
+    @include bicolumn;
   }
+  @include smol-screen-no-table;
 }
 
 .table-view-header-date {

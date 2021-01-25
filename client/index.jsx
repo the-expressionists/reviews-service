@@ -4,40 +4,55 @@ import PropTypes from 'prop-types';
 import getReviews from './network.js';
 import ReviewList from './components/ReviewList.jsx';
 import ReviewTable from './components/ReviewTable.jsx';
+import Modal from './components/Modal.jsx';
 import './style/reviewBar.scss';
 
-class App extends React.Component {
-    constructor(props) {
-        super(props);
-        let {getReviews} = props;
-        this.getReviews = getReviews;
-        this.state = {};
-    }
-    
-    componentDidMount() {
-        this.getReviews()
-          .then(reviews => {
-              console.log(reviews[~~(Math.random() * reviews.length)]);
-              this.setState({reviews});
-              console.log(this.state);
-          });
-    }
+class ReviewComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    let { getReviews } = props;
+    this.getReviews = getReviews;
+    this.state = { showModal: false };
+  }
 
-    render() {
-        let {reviews} = this.state;
-        // the key thing is a hack to get it to rerender after load
-        // necessary??
-        return (
-            <div>
-                {reviews
-                ? (<ReviewTable key={'rt-' + reviews.length} reviews={reviews} />)
-                : null}
-                {reviews  
-                ? (<ReviewList key={'rl-' + reviews.length} reviews={reviews}/>)
-                : null}
-            </div>
-        );
-    }
+  componentDidMount() {
+    this.getReviews()
+      .then(reviews => {
+        console.log(reviews[~~(Math.random() * reviews.length)]);
+        this.setState({ reviews });
+        console.log(this.state);
+      });
+  }
+
+  render() {
+    let { reviews, showModal } = this.state;
+    let toggle = (ev) => {
+      ev.preventDefault();
+      this.setState({showModal: true});
+    };
+    let content = () => (
+      <>
+        <ReviewTable key={'rt-' + reviews.length} reviews={reviews} />
+        {showModal
+          ? (
+        <Modal
+          element=<ReviewList key={'rl-' + reviews.length} reviews={reviews} />
+          closer={() => { }}
+          opacity={0.8}
+          />
+        ) : null}
+        <div onClick={toggle}>HHAAAUUUNNGHH???</div>
+        
+      </>
+    );
+    return (
+      <div>
+        {reviews
+          ? content()
+          : null}
+      </div>
+    );
+  }
 }
 
-ReactDOM.render(<App getReviews={getReviews}/>, document.getElementById('app'));
+ReactDOM.render(<ReviewComponent getReviews={getReviews} />, document.getElementById('app'));

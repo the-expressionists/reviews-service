@@ -43,8 +43,8 @@ const ReviewTableStats = ({ reviews, mean }) => {
   return (
     <div className="review-table-stats" >
       {plH.map(([key, pl], i) => (
-        <div className='review-table-row'>
-          <StatsRow key={'rtr-' + i} val={stats[key]} placeHolder={pl} places={1} />
+        <div key={'stsRow-' + i} className='review-table-row'>
+          <StatsRow val={stats[key]} placeHolder={pl} places={1} />
         </div>
       ))}
     </div>
