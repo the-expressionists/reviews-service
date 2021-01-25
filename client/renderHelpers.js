@@ -1,3 +1,7 @@
+/**
+ * @module {renderHelpers}
+ * Pure functions for use in aggregating and rendering reviews.
+ */
 
 /**
  * 
@@ -73,14 +77,7 @@ let cast = (konstruktor, value) => do {
     // eslint-disable-next-line @babel/new-cap
     new konstruktor(value);
   };
-
-/**
- * @param {Date} date - Date object to be formatted
-  * @return {String} Date formatted as `String(MM) DD, YY`
- */
-const prettyDate = (dateStr) => {
-  let date = cast(Date, dateStr); 
-  let months = [ 'January'
+const months = [ 'January'
                , 'February'
                , 'March'
                , 'April'
@@ -94,8 +91,25 @@ const prettyDate = (dateStr) => {
                , 'December'
                , 'February'
                ];
+
+/**
+ * @param {Date} date - Date object to be formatted
+  * @return {String} Date formatted as `String(MM) DD, YY`
+ */
+const prettyDate = (dateStr) => {
+  let date = cast(Date, dateStr); 
   let [d, m, y] = ['getDate', 'getMonth', 'getFullYear'].map(f => date[f]());
   return `${months[m]} ${d}, ${y}`;
+};
+
+/**
+ * 
+ * @param {Date | String} dateStr  - Date to be formatted
+ * @return {String} Date formatted as `String(MM), YYYY`
+ */
+const monthYear = (dateStr) => {
+  let date = cast(Date, dateStr);
+  return `${months[date.getMonth()]} ${date.getFullYear()}`;
 };
 
 /**
@@ -111,4 +125,5 @@ export { fmtStar
        , map
        , cast
        , prettyDate
+       , monthYear
        };
