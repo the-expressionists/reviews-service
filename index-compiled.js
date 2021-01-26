@@ -7,8 +7,7 @@ const cors = require('cors');
 
 const Review = require('./db/Review.js');
 // import {mkUUID}
-const {reviewsHandler} = require('./endpoints');
-
+const { reviewsHandler } = require('./endpoints');
 
 // eslint-disable-next-line @babel/new-cap
 const app = new express();
@@ -16,11 +15,11 @@ const PORT = process.env.PORT || 8081;
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(join(__dirname, '..', 'dist', 'client')));
 
-let log = (data) => {
+let log = data => {
   console.log(data);
   return data;
 };
