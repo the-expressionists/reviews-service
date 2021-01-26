@@ -17,8 +17,12 @@ const PORT = process.env.PORT || 8081;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use((req, res, next) => {
+  console.log(req.method);
+  next();
+});
 
-app.use(express.static(join(__dirname, '..', 'dist', 'client')));
+app.use(express.static(join(__dirname, '..', 'client')));
 
 let log = (data) => {
   console.log(data);

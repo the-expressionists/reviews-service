@@ -56,4 +56,4 @@ class ReviewComponent extends React.Component {
   }
 }
 
-ReactDOM.render(<ReviewComponent getReviews={getReviews} />, document.getElementById('app'));
+ReactDOM.render(<ReviewComponent getReviews={getReviews} />, document.getElementById('reviews'));
