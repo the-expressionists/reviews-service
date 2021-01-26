@@ -32,3 +32,6 @@ export default uploadToS3;
 ```
 
 To run the local server:
+`npm start`
+
+make sure `start.sh` is marked as executable (`chmod +x start.sh`)
