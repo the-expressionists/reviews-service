@@ -2,4 +2,6 @@ node_modules
 .vscode
 out
 dist/*.js
+dist/client/*
+dist/server/*
 config
