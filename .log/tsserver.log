@@ -1,0 +1,23 @@
+Info 0    [11:18:06.655] Starting TS Server
+Info 1    [11:18:06.655] Version: 4.1.3
+Info 2    [11:18:06.655] Arguments: /home/normie/.nvm/versions/node/v10.19.0/bin/node /home/normie/Projects/hooli/reviews-proxy/node_modules/.bin/tsserver --logFile /home/normie/Projects/hooli/reviews-proxy/.log/tsserver.log --logVerbosity info --cancellationPipeName /tmp/0466d1aceb4b2b4b4ecb693563959366/tscancellation*
+Info 3    [11:18:06.655] Platform: linux NodeVersion: 10 CaseSensitive: true
+Info 4    [11:18:06.655] ServerMode: undefined syntaxOnly: false hasUnknownServerMode: undefined
+Info 5    [11:18:06.666] Search path: /home/normie/Projects/hooli/reviews-proxy
+Info 6    [11:18:06.666] For info: /home/normie/Projects/hooli/reviews-proxy/index.js :: No config files found.
+Info 7    [11:18:06.669] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 8    [11:18:08.339] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true Elapsed: 1669.4521220009774ms
+Info 9    [11:18:08.339] Project '/dev/null/inferredProject1*' (Inferred)
+Info 10   [11:18:08.339] 	Files (151)
+
+Info 11   [11:18:08.339] -----------------------------------------------
+Info 12   [11:18:08.378] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
+Info 13   [11:18:08.880] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true Elapsed: 502.3851459994912ms
+Info 14   [11:18:08.880] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info 15   [11:18:08.880] 	Files (142)
+
+Info 16   [11:18:08.880] -----------------------------------------------
+Info 17   [11:18:09.166] Before ensureProjectForOpenFiles:
+Info 18   [11:18:09.166] After ensureProjectForOpenFiles:
+Info 19   [11:18:09.167] got projects updated in background, updating diagnostics for /home/normie/Projects/hooli/reviews-proxy/index.js
+Info 20   [11:18:12.102] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
