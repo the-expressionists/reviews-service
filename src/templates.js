@@ -21,14 +21,16 @@ const parse = require('s-expression');
  * 
  *  Postfix your element symbols with `!` to denote that they should be spliced in. It's almost like macros...
  */
+
+let flat = (x) => Array.isArray(x) ? x : [x];
+
 let template = (assocs, templateStr) => {
   let map = (assocs instanceof Map ? assocs : new Map(Object.entries(assocs).map(([k, v]) => [k + '!', v])));
   let p;
   try {
     p = parse(templateStr);
     let walk = (node) => {
-      io
-      if (node instanceof String) {
+      if (!Array.isArray(node)) {
         return node;
       }
       let [x, attr, ...xs] = node;
@@ -41,33 +43,16 @@ let template = (assocs, templateStr) => {
         tag = ' ' + attr[1].map(([key, val]) => `${key}="${val}"`).join(' ');
       } else {
         tag = '';
-        xs = [].concat(attr, xs);
+        xs = flat(attr).concat(xs)
       }
       return (
         `<${x}${tag}>${xs.map(walk).join('')}</${x}>`
       );
     }
-    return walk(p);
+    return p instanceof Error ? templateStr : walk(p);
   } catch {
     return templateStr;
   }
 }
 
-export default template;
-
-// let macros = {
-//   'reviews': `(div '((class body) (on-click "handleClick")) (p "some nested text!!!") (main!))`,
-//   'henlo': '<div>henlo!!</div>',
-//   'main': `<script src="index.js"></script>`
-// }
-// let s = `
-//     (div '((class review) (id "app"))
-//       (div '((class review-body)) "hello world" 
-//         (p "goodbye")
-//         (reviews!)
-//         (span "this is a span")
-//         (henlo!)
-//         (main!)))
-// `;
-
-// console.log(template(macros, s));
+module.exports = {template};

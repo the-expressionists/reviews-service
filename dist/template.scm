@@ -1,0 +1,7 @@
+(html '()
+  (head)
+  (body '()
+    (div '((class "main-container"))
+     (script '((type "module") (src "./main.js")) )
+     (script '((type "module") (src "./reviews.js")) )
+     (script '((type "module") (src "./similar.js")) ))))
