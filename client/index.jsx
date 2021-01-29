@@ -32,6 +32,10 @@ class ReviewComponent extends React.Component {
     };
     let content = () => (
       <>
+        <div className="reviews-title">
+          <span className="reviews-title-header">Reviews</span>
+          <span>{'  (' + this.state.reviews.length + ')'}</span>
+        </div>
         <ReviewTable key={'rt-' + reviews.length} reviews={reviews} />
         {showModal
           ? (

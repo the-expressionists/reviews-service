@@ -15,14 +15,6 @@ $faintgrey: rgb(235, 235, 235);
 
 body {
   @include marginless;
-  color: rgb(72, 72, 72);
-  padding: 40px 2%;
-
-  font: {
-    family: 'Noto Sans', sans-serif;
-    size: 17.5px; // taken from ikea site, idk if they use media queries
-    weight: 400;
-  }
 }
 .stats-table {
   display: grid;
@@ -44,6 +36,25 @@ body {
     justify-self: end;
 
   }
+}
+
+#reviews {
+  font-size: 17.5px;
+  font-weight: 400;
+  font-family: 'Noto Sans', sans-serif;
+  color: rgb(72, 72, 72);
+}
+
+.reviews-title {
+  margin-bottom: .5rem;
+  color: black;
+  font-size: 1.375rem;
+  line-height: 1.4545454545;
+  font-weight: 400;
+}
+
+.reviews-title-header {
+  font-weight: 700
 }
 
 .ratings-bar {
