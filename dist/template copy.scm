@@ -1,7 +1,0 @@
-(html '()
-  (head)
-  (body '()
-    (div '((class "main-container"))
-     (script '((type "module" ) (src "main.js")) (main!))
-     (script '((type "module" ) (src "reviews.js")) (reviews!))
-     (script '((type "module" ) (src "similar.js")) (similar!)))))

@@ -5,12 +5,14 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const axios = require('axios');
 const fs = require('fs/promises');
-const {template} = require('../src/templates.js');
+// const {template} = require('../src/templates.js');
+const pug = require('pug');
+const webpack = require('webpack');
 const λ = require('ramda');
 const Λ = require('ramda-adjunct');
 
 
-const {map, view, pipe, pipeWith} = λ;
+const {keys, zipObj, andThen, map, view, pipe, pipeWith} = λ;
 
 const PORT = process.env.PORT ?? 8082;
 const app = express();
@@ -28,17 +30,12 @@ const display = (s) => { console.log(s); return s };
 const { env } = process;
 
 const services =
-{ reviews: env.REVIEWS ?? 'http://localhost:8081'
-, similar: env.SIMILAR ?? 'http://localhost:8080'
-, mainDsc: env.MAINDESC ?? 'http://localhost:3000'
+{ reviews: env.REVIEWS ?? 'http://localhost:8081/bundle.js'
+, similar: env.SIMILAR ?? 'http://localhost:8080/path.js'
+, main: env.MAINDESC ?? 'http://localhost:3000/dist/bundle.js'
 };
 
-const templatePath = path.join(__dirname, '..', 'dist', 'template.scm');
-let pxTmpl;
-
-(async () => {
-  pxTmpl = await fs.readFile(templatePath, 'utf-8');
-})();
+const templatePath = path.join(__dirname, '..', 'dist', 'template.pug');
 
 const findBundleUrl = (html) => {
   let reg = /<script.*src="(?<url>.*)">/;
@@ -49,12 +46,13 @@ const findBundleUrl = (html) => {
 const joinURL = (base, ...args) => base + '/' + path.join(...args);
 const data = λ.lensProp('data');
 
-const kleisli = λ.unapply(λ.pipeWith(λ.andThen));// λ.pipeWith(λ.andThen);
+const kleisli = λ.unapply(λ.pipeWith(andThen));
 const partial = (f, ...args) => λ.partial(f, args);
 const split = (x) => [x, x];
 const left = λ.lensIndex(0);
 const right = λ.lensIndex(1);
 const pure = Promise.resolve;
+const liftA2 = λ.curry((f, g, h, x) => f(g(x))(h(x)));
 
 const getBundle = (url) => kleisli
 ( partial(axios.get)
@@ -65,28 +63,37 @@ const getBundle = (url) => kleisli
 , λ.view(data)
 )(url);
 
-const buildMacros = async (urls) => {
-  let files = await Promise.all(λ.values(urls).map(getBundle));
-  return λ.zipObj(keys(urls), files);
-}
+// hate how methods prevent us from eta reducing
+let get = (url) => axios.get(url);
+let all = (p) => Promise.all(p);
 
-const buildTemplate = (macros = {}) => {
-  let s = template(macros, pxTmpl);
-  console.log(s);
-}
+// let views;
+// (async () => {
+//   try {
+//     let fetch = kleisli(get, λ.view(data), );
+//     let join = // I hate how Promises turn `andThen` into either <$> or >>=
+//       liftA2 ( andThen)
+//         (pipe( keys, zipObj))
+//         (pipe( λ.values
+//              , map(fetch)
+//              , all
+//              ));
+//     views = await join(services);
+//   } catch (err) {
+//     console.log(err);
+//   }
+// })();
 
-
-[ cors()
-, bodyParser.json()
+app.set('view engine', 'pug');
+app.use(cors());
+[ 
+ bodyParser.json()
 , express.static(path.join(__dirname, 'dist'))
 ].forEach(md => app.use(md));
 
 app.get('/', (req, res) => {
-  res.send('1');
-  res.send('2');
+  res.render(templatePath, services);
 })
 
 app.listen(PORT);
 console.log(`proxy listening on ${PORT}`);
-
-setTimeout(buildTemplate, 5000);
