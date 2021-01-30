@@ -36,7 +36,9 @@ def parse_args(argv):
     args = [ ('install', 'Install dependencies for services')
            , ('clone', 'Clone down submodules')
            , ('build', 'Build bundles for all services')
-           , ('run', 'Run all services')
+           , ('watch', 'Run development servers for all services')
+           , ('all', 'Run all services')
+           , ('run', 'Run local proxy')
            ]
     parser = argparse.ArgumentParser(description="Helper script for the JTWENL proxy server")
     actions = parser.add_mutually_exclusive_group(required=True)
@@ -47,7 +49,6 @@ def parse_args(argv):
 
 async def lift(f, *args):
     if inspect.iscoroutinefunction(f):
-        print('yep')
         return await(f(*args))
     return f(args)
 
@@ -60,14 +61,14 @@ async def pushd_each(paths, f):
 async def buildall(paths):
     return await pushd_each(paths, lambda _: os.system("npm run build"))
 
-async def clone_modules():
+async def clone_modules(p):
     os.system("git submodule update --init --recursive --remote")
 
-async def run_services(paths):
+async def start_services(cmd, paths):
     procs = []
     async def run_service(p):
         try:
-            proc = subprocess.Popen(["npm", "start"])
+            proc = subprocess.Popen(["npm", "run", cmd])
             print(f"Service running in the background: {p}, new pid is {proc.pid}")
             procs.append(proc)
         except OSError as e:
@@ -77,6 +78,7 @@ async def run_services(paths):
     await pushd_each(paths, run_service)
     return procs
 
+    
 def run_installs(paths):
     for p in paths:
         npm_install(p)
@@ -102,13 +104,17 @@ def signal_handler(procs):
 
 async def main():
     args = parse_args(sys.argv[1:])
+    os.environ['REVIEWS'] = 'http://52.113.103.43'
+    os.environ['SIMILAR'] = 'http://3.21.220.231'
+    os.environ['MAIN'] = 'http://3.129.200.191:3000'
+
     
-    def run_exit(f, args=None):
-        f(args)
+    async def run_exit(f, args=None):
+        await f(args)
         sys.exit(0)
     
-    async def service(paths):
-        procs = await run_services(paths)
+    async def service(cmd, paths):
+        procs = await start_services(cmd, paths)
         for sig in [signal.SIGINT, signal.SIGTERM]:
             signal.signal(sig, signal_handler(procs))
         return await bg_loop()
@@ -118,8 +124,10 @@ async def main():
     actions = {
         'clone': partial(run_exit, clone_modules),
         'install': partial(run_exit, run_installs, paths),
-        'run': partial(service, paths),
-        'build': partial(buildall, paths)
+        'all': partial(service, 'start', paths),
+        'watch': partial(service, 'watch', paths),
+        'build': partial(buildall, paths),
+        'run': partial(service, 'start', ['.'])
     }
 
     for v, b in vars(args).items():

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "watch": "webpack -c ./webpack.config.js -w",
-    "start": "echo 'hello'",
+    "start": "node server/index.js",
     "test": "jest"
   },
   "repository": {

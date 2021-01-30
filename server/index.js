@@ -32,8 +32,11 @@ const { env } = process;
 const services =
 { reviews: env.REVIEWS ?? 'http://localhost:8081/bundle.js'
 , similar: env.SIMILAR ?? 'http://localhost:8080/path.js'
-, main: env.MAINDESC ?? 'http://localhost:3000/dist/bundle.js'
-};
+, main: env.MAINDESC ?? 'http://localhost:3000/dist/main.js'
+}; 
+
+// temporary hack until we get all CSS included in our bundles.
+services.mainCSS: env.MAINCSS ?? services.main + 'style/style.css';
 
 const templatePath = path.join(__dirname, '..', 'dist', 'template.pug');
 
@@ -91,6 +94,7 @@ app.use(cors());
 , express.static(path.join(__dirname, 'dist'))
 ].forEach(md => app.use(md));
 
+console.log(services);
 app.get('/', (req, res) => {
   res.render(templatePath, services);
 })

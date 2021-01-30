@@ -1,7 +1,14 @@
+//- - var sim = script(crossorigin src=`${similar}`)
+//- - var rev = script(crossorigin src=`${reviews}`)
+
 html
     head title= JTWENL Store
+    link(rel='stylesheet' href=`${mainCSS}`)
     body
-        div(id='main-desc')
-        script(crossorigin src=`${main}`)
-        //- script(crossorigin src=`${similar}`)
+        div(id='desc')
+        #{main}
+        #{reviews}
+        #{similar}
+        //- script(crossorigin src=`${main}`)
         //- script(crossorigin src=`${reviews}`)
+        //- script(crossorigin src=`${similar}`)
