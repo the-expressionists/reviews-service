@@ -2,13 +2,15 @@
 //- - var rev = script(crossorigin src=`${reviews}`)
 
 html
-    head title= JTWENL Store
-    link(rel='stylesheet' href=`${mainCSS}`)
+    head
+        link(rel='stylesheet' href=`${mainCSS}`)
+        <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+        <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
     body
-        div(id='desc')
-        #{main}
-        #{reviews}
-        #{similar}
-        //- script(crossorigin src=`${main}`)
-        //- script(crossorigin src=`${reviews}`)
-        //- script(crossorigin src=`${similar}`)
+        div(itemid='no id' id='main')
+        script(src=`${main}`)
+        div(id='reviews')
+        //- script(src="http://localhost:8081/bundle.js.br")
+        div(id='app')
+        script(src=`${reviews}`)
+        script(src=`${similar}`)

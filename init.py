@@ -104,9 +104,12 @@ def signal_handler(procs):
 
 async def main():
     args = parse_args(sys.argv[1:])
-    os.environ['REVIEWS'] = 'http://52.113.103.43'
-    os.environ['SIMILAR'] = 'http://3.21.220.231'
-    os.environ['MAIN'] = 'http://3.129.200.191:3000'
+
+    # temporary hack for now
+    os.environ['REVIEWS'] = 'http://52.13.103.43/bundle.js'
+    os.environ['SIMILAR'] = 'http://3.21.220.231:8080/path.js'
+    os.environ['MAINDESC'] = 'http://3.129.200.191:3000/mainDescription.bundle.js'
+    os.environ['MAINCSS'] = 'http://3.129.200.191:3000/style/style.css'
 
     
     async def run_exit(f, args=None):
