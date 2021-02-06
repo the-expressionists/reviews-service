@@ -1,10 +1,10 @@
 /**
  * @module Seed
- * contains some functions for generating fake data, fetching images from 
+ * contains some functions for generating fake data, fetching images from
  *  `thispersondoesnotexist.com` and uploading them to AWS. The stored URLs are then
  *  bundled in a `Review` object and saved in the database.
  * Module will seed 100 records when called directly.
- * 
+ *
  */
 import faker from 'faker';
 import Review from './Review.js';
@@ -23,7 +23,7 @@ const genUUID = () => {
     buf[6] &= 0b01001111; // set high nibble to 4
     buf[8] &= 0b10111111; // set high nibble to one of 8, 9, 'A', 'B'
     let s = buf.toString('hex');
-    let intervals = [8, 4, 4, 4, 12]; // positions to split s at 
+    let intervals = [8, 4, 4, 4, 12]; // positions to split s at
     let offset = 0;
     return intervals.reduce((a, i) => `${a}-${s.substring(offset, offset += i)}`, '').slice(1);
 };
@@ -40,9 +40,9 @@ let photoGetter = axios.create({
 });
 
 /**
- * 
+ *
  * @param {Buffer} buf - Buffer object representing a JPEG image
- * @return {Promise(ManagedUpload)} - AWS object with metadata for the uploaded S3 object 
+ * @return {Promise(ManagedUpload)} - AWS object with metadata for the uploaded S3 object
  */
 let bundlePhoto = (buf) => uploadToS3(`${genUUID()}.jpeg`, Buffer.from(buf, 'binary'));
 
@@ -61,7 +61,7 @@ let getImgUrls = (numUrls, delayTime = 1000) => {
                      return bundlePhoto(resp.data);
                     })
                  .then(s3Obj => s3Obj |> #.Location) // upload to S3, returning the location
-                ) 
+                )
         |> Promise.all
         ).catch(::console.log);
 };
@@ -85,7 +85,7 @@ let mkReview = (thumbnail) => {
             quality: mkStar(),
             appearance: mkStar(),
             works: mkStar()
-        } 
+        }
     };
 };
 

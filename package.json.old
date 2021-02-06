@@ -1,6 +1,6 @@
 {
   "name": "reviewcomponent",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "engines": {
@@ -9,22 +9,22 @@
   "scripts": {
     "watch": "webpack -c ./webpack.config.js -w",
     "build": "webpack -c ./webpack.config.js --mode production",
-    "nodemon": "nodemon server/index.js",
-    "scrape": "babel-node server/db/scraper/scrape.js",
-    "seed": "node server/db/seed.js",
-    "start": "node server/index.js",
+    "build-server": "babel server/index.js --out-file index-compiled.js",
+    "server": "nodemon --exec babel-node server/index.js",
+    "seed": "babel-node server/db/Seed.js",
+    "start": "./start.sh",
     "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/the-expressionists/reviews-service.git"
+    "url": "git+https://github.com/jtwenl/ReviewComponent.git"
   },
-  "author": "Edward Zhao",
+  "author": "norman liu",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/the-expressionists/reviews-service/issues"
+    "url": "https://github.com/jtwenl/ReviewComponent/issues"
   },
-  "homepage": "https://github.com/the-expressionists/reviews-service#readme",
+  "homepage": "https://github.com/jtwenl/ReviewComponent#readme",
   "devDependencies": {
     "@babel/cli": "^7.12.0",
     "@babel/core": "^7.12.10",
