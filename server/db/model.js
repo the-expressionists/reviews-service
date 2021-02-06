@@ -1,8 +1,14 @@
 const cassandra = require('cassandra-driver');
+const distance = cassandra.types.distance;
 
 const client = new cassandra.Client({
   contactPoints: ['localhost'],
   localDataCenter: 'datacenter1'
+  // pooling: {
+  //   coreConnectionsPerHost: {
+  //     [distance.local]: 3
+  //   }
+  // }
 })
 
 class Model {
@@ -16,7 +22,7 @@ class Model {
   createSchema() {
     return client.execute(`
       CREATE KEYSPACE IF NOT EXISTS reviews_service
-      WITH replication = {'class':'SimpleStrategy','replication_factor':3}
+      WITH replication = {'class':'SimpleStrategy','replication_factor':1}
     `)
     .then(() => client.execute(`
       USE reviews_service

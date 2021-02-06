@@ -1,11 +1,18 @@
 const Model = require('./model.js');
 const faker = require('faker');
 const s3 = require('../../config/aws.js');
+//const memwatch = require('@airbnb/node-memwatch');
+
 
 let {lorem, internet, random} = faker;
 let M = new Model();
 
 const N_PRIMARY_RECORDS = 10000000;
+
+// memory monitoring and logging to console
+// memwatch.on('stats', (stats) => {
+//   console.log(`used: ${stats.used_heap_size}`);
+// });
 
 const randomIntInRange = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -23,10 +30,11 @@ const getImgUrls = () => {
 }
 
 // generate list of insert queries for reviews
-const generateReviews = (n, imgUrls) => {
-  let insertQueries = [];
+const generateReviews = async (n, imgUrls) => {
+  let count = 0;
   for (id = 1; id <= n; id++) {
-    let numReviews = random.number(20);
+    let numReviews = randomIntInRange(1, 20);
+    let insertQueries = [];
     for (i = 0; i < numReviews; i++) {
       let review = {
         productid: id,
@@ -46,13 +54,18 @@ const generateReviews = (n, imgUrls) => {
       }
       insertQueries.push(M.insertReview(review))
     }
+    count++;
+    console.log(count);
+    await Promise.all(insertQueries);
   }
-  return Promise.all(insertQueries);
 }
 
+// do the thing
 M.connect()
+.then(() => console.time('runtime'))
 .then(() => M.dropSchema())
 .then(() => M.createSchema())
 .then(() => getImgUrls())
 .then(imgUrls => generateReviews(N_PRIMARY_RECORDS, imgUrls))
-.then(() => M.endConnection());
+.then(() => M.endConnection())
+.then(() => console.timeEnd('runtime'));
