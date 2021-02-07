@@ -20,11 +20,11 @@ const resetCrg = () => {
   process.stdout.clearLine();
   process.stdout.cursorTo(0);
 }
-const writeProgress = (prog, limit) => {
+const writeProgress = (prog, limit, batchtime) => {
   resetCrg();
   let tenth = (prog / limit * 10);
   let progBar = ('[' + '='.repeat(tenth * 2) + '>'.repeat(tenth < 10)).padEnd(21) + ']';
-  process.stdout.write(`Progress: ${(tenth * 10).toFixed(0)}%`.padEnd(20) + progBar);
+  process.stdout.write(`BatchT: ${batchtime}, Progress: ${(tenth * 10).toFixed(0)}%`.padEnd(20) + progBar);
 }
 
 const endProgress = () => {
@@ -36,6 +36,9 @@ const endProgress = () => {
 const randomIntInRange = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+// sleep func
+const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
 
 // pull s3 urls
 const createImgUrl = (key) => {
@@ -80,17 +83,24 @@ function *generateNReviews(n, id, imgUrls) {
 }
 
 // generate list of insert queries for reviews
-const seedReviews = async (n, imgUrls) => {
+const seedReviews = async (n, imgUrls, buffSize) => {
+  let batch = [];
   for (id = 1; id <= n; id++) {
-    writeProgress(id, n);
-    let batch = [];
-    let numReviews = randomIntInRange(1, 20);
+
+    let numReviews = randomIntInRange(2, 3);
     let gen = generateNReviews(numReviews+1, id, imgUrls);
     for (i = 0; i < numReviews; i++) {
       let curr = gen.next();
       batch.push(curr.value);
     }
-    await Promise.all(batch.map(rev => M.insertReview(rev)));
+    if (id % buffSize === 0) {
+      let start = Date.now();
+      await Promise.all(batch.map(rev => M.insertReview(rev)));
+      let end = Date.now();
+      writeProgress(id, n, end - start);
+      batch = [];
+      await sleep(1000);
+    }
   }
   endProgress();
 }
@@ -101,6 +111,6 @@ M.connect()
 .then(() => M.dropSchema())
 .then(() => M.createSchema())
 .then(() => getImgUrls())
-.then(imgUrls => seedReviews(N_PRIMARY_RECORDS, imgUrls))
+.then(imgUrls => seedReviews(N_PRIMARY_RECORDS, imgUrls, 5000))
 .then(() => M.endConnection())
 .then(() => console.timeEnd('runtime'));
