@@ -11,7 +11,9 @@
     "build": "webpack -c ./webpack.config.js --mode production",
     "nodemon": "nodemon server/index.js",
     "scrape": "babel-node server/db/scraper/scrape.js",
-    "seed": "node server/db/seed.js",
+    "gen": "node server/db/gen.js",
+    "resetschema": "node server/db/resetschema.js",
+    "seed": "bash ./server/db/seed.sh",
     "start": "node server/index.js",
     "test": "jest"
   },

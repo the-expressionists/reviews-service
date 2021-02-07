@@ -22,10 +22,10 @@ class Model {
   createSchema() {
     return client.execute(`
       CREATE KEYSPACE IF NOT EXISTS reviews_service
-      WITH replication = {'class':'SimpleStrategy','replication_factor':1}
+      WITH replication = {'class':'SimpleStrategy','replication_factor':1};
     `)
     .then(() => client.execute(`
-      USE reviews_service
+      USE reviews_service;
     `))
     .then(() => client.execute(`
     CREATE TABLE IF NOT EXISTS reviews (
@@ -44,14 +44,14 @@ class Model {
       appearance tinyint,
       works tinyint,
       PRIMARY KEY (productid, date)
-    ) WITH CLUSTERING ORDER BY (date DESC)
+    ) WITH CLUSTERING ORDER BY (date DESC);
     `))
     .then(() => console.log('Schema Created'))
     .catch(err => console.log(err));
   }
 
   dropSchema() {
-    return client.execute('DROP KEYSPACE IF EXISTS reviews_service')
+    return client.execute('DROP KEYSPACE IF EXISTS reviews_service;')
     .then(() => console.log('Schema Dropped'))
     .catch(err => console.log(err));
   }
@@ -59,7 +59,7 @@ class Model {
   insertReview(review) {
     let queryString = `
       INSERT INTO reviews (productid, title, user, date, likes, body, thumbnail, stars, recommend, difficulty, value, quality, appearance, works)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     `;
     let {productid, title, user, date, likes, body, thumbnail, stars, recommend, difficulty, value, quality, appearance, works} = review;
     let values = [productid, title, user, date, likes, body, thumbnail, stars, recommend, difficulty, value, quality, appearance, works];
@@ -68,7 +68,7 @@ class Model {
   }
 
   getReviews(productid) {
-    return client.execute(`SELECT * FROM reviews WHERE productid=${productid}`)
+    return client.execute(`SELECT * FROM reviews WHERE productid=${productid};`)
     .catch(err => console.log(err));
   }
 
