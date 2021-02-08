@@ -5,4 +5,4 @@ dist/*.js
 dist/client/*.js
 dist/server/*
 config
-newrelic.js
+newrelic*

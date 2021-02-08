@@ -1,6 +1,6 @@
+require('newrelic');
 const express = require('express');
 const Model = require('./db/model.js');
-require('newrelic');
 
 const M = new Model();
 M.connect();
