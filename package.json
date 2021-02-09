@@ -9,11 +9,13 @@
   "scripts": {
     "watch": "webpack -c ./webpack.config.js -w",
     "build": "webpack -c ./webpack.config.js --mode production",
+    "client": "node server/client-server.js",
     "nodemon": "nodemon server/index.js",
     "scrape": "babel-node server/db/scraper/scrape.js",
     "seed": "node server/db/seed.js",
     "start": "node server/index.js",
-    "test": "jest"
+    "start-prod": "NODE_ENV=production node server/index.js",
+    "test": "k6 run test/load-test.js"
   },
   "repository": {
     "type": "git",

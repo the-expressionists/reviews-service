@@ -67,8 +67,8 @@ class Model {
   }
 
   getReviews(productid) {
-    return client.execute(`SELECT * FROM reviews WHERE productid=${productid}`)
-    .catch(err => console.log(err));
+    return client.execute(`SELECT * FROM reviews WHERE productid=${productid}`);
+    //.catch(err => console.log(err));
   }
 
   endConnection() {
