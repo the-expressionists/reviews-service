@@ -1,35 +1,25 @@
+require('newrelic');
 const express = require('express');
-const process = require('process');
-const { join } = require('path');
-const axios = require('axios');
-const bodyParser = require('body-parser');
 const cors = require('cors');
+const Model = require('./db/model.js');
 
-const Review = require('./db/Review.js');
-// import {mkUUID}
-const {reviewsHandler} = require('./endpoints');
+const M = new Model();
+M.connect();
 
-
-// eslint-disable-next-line @babel/new-cap
-const app = new express();
-const PORT = process.env.PORT || 8081;
+const app = express();
 
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
-app.use((req, res, next) => {
-  console.log(req.method);
-  next();
-});
 
-app.use(express.static(join(__dirname, '..', 'client')));
+app.get('/api/reviews/:productid', (req, res) => {
+  M.getReviews(req.params.productid)
+  .then(result => {
+    res.json(result.rows);
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500);
+  });
+})
 
-let log = (data) => {
-  console.log(data);
-  return data;
-};
-
-app.get('/reviews', reviewsHandler);
-
-app.listen(PORT);
-console.log(`listening on ${PORT}`);
+const PORT = process.env.PORT || 1337;
+app.listen(PORT, () => console.log(`listening on port ${PORT}`));

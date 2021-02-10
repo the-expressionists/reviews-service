@@ -16,9 +16,28 @@ class ReviewComponent extends React.Component {
   }
 
   componentDidMount() {
-    this.getReviews()
-      .then(reviews => {
-        console.log(reviews[~~(Math.random() * reviews.length)]);
+    this.getReviews(1337)
+      .then(response => {
+        let reviews = response.map(review => (
+        {
+          title: review.title,
+          user: review.user,
+          date: review.date,
+          likes: review.likes,
+          body: review.body,
+          stars: review.stars,
+          thumbnail: review.thumbnail,
+          recommend: review.recommend,
+          product: review.productid,
+          metrics: {
+              difficulty: review.difficulty,
+              value: review.value,
+              quality: review.quality,
+              appearance: review.appearance,
+              works: review.works
+          }
+        }));
+        //console.log(reviews[~~(Math.random() * reviews.length)]);
         this.setState({ reviews });
         console.log(this.state);
       });
@@ -47,7 +66,7 @@ class ReviewComponent extends React.Component {
         ) : null}
         {/* TODO add the modal back in*/}
         {/* <div onClick={toggle}>HHAAAUUUNNGHH???</div> */}
-        
+
       </>
     );
     return (
